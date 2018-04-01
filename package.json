@@ -1,0 +1,53 @@
+{
+  "name": "sanitization",
+  "version": "0.0.1-alpha",
+  "description": "sanitize dirty data",
+  "main": "dist/index.js",
+  "scripts": {
+    "test": "ava",
+    "clean": "rm -rf ./dist/*",
+    "build": "npm run clean & rollup -c",
+    "prepublishOnly": "npm test; npm run build",
+    "precommit": "npm test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Val-istar-Guo/sanitization.git"
+  },
+  "keywords": [
+    "sanitize",
+    "sanitization",
+    "dirty",
+    "data"
+  ],
+  "author": "Val.istar.Guo <Val.istar.Guo@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Val-istar-Guo/sanitization/issues"
+  },
+  "homepage": "https://github.com/Val-istar-Guo/sanitization#readme",
+  "dependencies": {},
+  "devDependencies": {
+    "ava": "^1.0.0-beta.3",
+    "babel-core": "^6.26.0",
+    "babel-plugin-external-helpers": "^6.22.0",
+    "babel-plugin-transform-object-rest-spread": "^6.26.0",
+    "babel-preset-env": "^1.6.1",
+    "babel-register": "^6.26.0",
+    "rollup": "^0.57.1",
+    "rollup-plugin-babel": "^3.0.3",
+    "rollup-plugin-node-resolve": "^3.3.0"
+  },
+  "ava": {
+    "files": [
+      "test/**/*.js"
+    ],
+    "sources": [
+      "src/**/*.js"
+    ],
+    "failFast": true,
+    "require": [
+      "babel-register"
+    ]
+  }
+}
