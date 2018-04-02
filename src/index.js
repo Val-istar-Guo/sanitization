@@ -9,8 +9,9 @@ import filter from './filter'
 import each from './each'
 import props from './props'
 
-import req from './require';
-import def from './default';
+import req from './require'
+import def from './default'
+import len from './length'
 
 
 const serialize = (func, wrap) => (value, error = true, next = identify) => {
@@ -31,7 +32,7 @@ const descorator = func => {
 
   func.default = (...arg) => descorator(serialize(func, def(...arg)))
   func.require = (...arg) => descorator(serialize(func, req(...arg)))
-  // func.length = (...arg) => serialize(func, length(...arg))
+  func.len = (...arg) => descorator(serialize(func, len(...arg)))
 
   return func;
 }
