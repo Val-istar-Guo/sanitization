@@ -2,7 +2,7 @@ import test from 'ava'
 import sa from '../src'
 
 
-test.skip('# sa', t => {
+test('# sa', t => {
   const completeData = {
     name: '袋袋购超市5周年店庆满100换购活动',
     // 2在系统中代表换购活动
@@ -103,9 +103,30 @@ test.skip('# sa', t => {
         id: sa.number.require(),
         name: sa.string,
         number: sa.number.require(),
+        price: sa.number,
         photos: sa.array,
       }),
       promotionPrice: sa.number.require()
     })
   })
+
+  /**
+   * 由于接口可能存在bug，我们仅把用户能够安全操作的数据渲染给用户使用
+   * 保证项目的稳定性
+   */
+  const dirtyResult = {
+    name: '袋袋购超市5周年店庆满100换购活动',
+    minPrice: 100,
+
+    products: [
+      {
+        units: [
+          { id: 3, name: '拖把', number: 1, price: 75, photos: [{ url: 'xxx'}] },
+        ],
+        promotionPrice: 40,
+      },
+    ]
+  }
+
+  t.deepEqual(santize(dirtyData).products[0].units[0], dirtyResult.products[0].units[0])
 })
