@@ -21,6 +21,7 @@ const serialize = (func, wrap) => (value, error = true, next = identify) => {
 
 const descorator = func => {
   Object.defineProperty(func, 'string', { get: () =>  descorator(serialize(func, string)) })
+  Object.defineProperty(func, 'stringify', { get: () =>  descorator(serialize(func, string)) })
   Object.defineProperty(func, 'number', { get: () => descorator(serialize(func, number)) })
   Object.defineProperty(func, 'array', { get: () => descorator(serialize(func, array)) })
   Object.defineProperty(func, 'object', { get: () => descorator(serialize(func, object)) })
