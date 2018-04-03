@@ -31,7 +31,7 @@ test('# sa.props should output object and accept object as rules', t => {
     productName: sa.string,
     rate: sa.string,
     type: sa.number,
-    id: sa.number,
+    id: sa.number.default(0),
     photos: sa.array,
     products: sa.array,
     rule: {

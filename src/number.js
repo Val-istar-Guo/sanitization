@@ -1,20 +1,14 @@
 export default next => context => {
   let { value, origin } = context
 
-  if (value === origin && typeof value === 'string' && value.length) {
-    value = Number(value)
+  if (typeof value === 'string' || typeof value === 'boolean') context.value = Number(value)
+  else if (typeof value !== 'number') context.value = NaN
 
-    // NOTE: if origin is number-like string, treat it as a number.
-    if (isNaN(value)) value = 0
-    else context.origin = value
-  }
-  if (typeof value !== 'number') {
-    value = Number(value)
-    if (isNaN(value)) value = 0
+  if (value === origin && typeof value === 'string' && value.length && !isNaN(context.value)) {
+    context.origin = context.value
   }
 
   context.expect = 'number'
-  context.value = value
   context.pass = true
   return next(context)
 }
