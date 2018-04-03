@@ -128,5 +128,5 @@ test('# sa', t => {
     ]
   }
 
-  t.deepEqual(santize(dirtyData).products[0].units[0], dirtyResult.products[0].units[0])
+  t.deepEqual(santize(dirtyData), dirtyResult)
 })
