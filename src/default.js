@@ -8,7 +8,7 @@ export default defaultValue => next => context => {
   if (type(origin) === expect) return next(context)
 
   if (expect && type(defaultValue) !== expect) {
-    wran(`default value should be typeof ${expect} but get ${type(defaultValue)}`)
+    warn(`default value should be typeof ${expect} but get ${type(defaultValue)}`)
   }
 
   if (defaultValue !== undefined) context.value = defaultValue;

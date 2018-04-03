@@ -15,7 +15,7 @@ test('# sa.default should return origin value when input is expected', t => {
 })
 
 test('# sa.default should return default value when input is not expected', t => {
-  t.is(sa.number.default(10)(''), 10)
+  t.is(sa.number.default(10)(NaN), 10)
   t.true(sa.bool.default(true)(''))
 
   const arr = [1, 2, 3]

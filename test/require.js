@@ -3,7 +3,7 @@ import sa from '../src'
 
 
 test('# sa.require should throw error when origin value is not expected', t => {
-  t.throws(() => sa.number.require()(''))
+  t.throws(() => sa.number.require()(NaN))
   t.throws(() => sa.bool.require()(''))
   t.throws(() => sa.array.require()(''))
   t.throws(() => sa.object.require()(''))

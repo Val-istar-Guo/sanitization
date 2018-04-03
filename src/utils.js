@@ -9,6 +9,7 @@ export const warn = string => console.warn(`[Sanitization Warn] ${string}`)
 export const type = value => {
   if (Array.isArray(value)) return 'array'
   else if (value === null) return 'null'
+  else if (typeof value === 'number' && isNaN(value)) return 'NaN'
 
   return typeof value
 }
