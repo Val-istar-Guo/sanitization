@@ -95,7 +95,7 @@ test('# sa', t => {
     ]
   }
 
-  const santize = sa.props({
+  const santize = sa.keys({
     name: sa.string,
     minPrice: sa.number.require(),
     products: sa.filter({

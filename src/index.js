@@ -7,7 +7,7 @@ import bool from './bool'
 
 import filter from './filter'
 import each from './each'
-import props from './props'
+import keys from './keys'
 
 import req from './require'
 import def from './default'
@@ -27,7 +27,7 @@ const descorator = func => {
   Object.defineProperty(func, 'object', { get: () => descorator(serialize(func, object)) })
   Object.defineProperty(func, 'bool', { get: () => descorator(serialize(func, bool)) })
 
-  func.props = (...arg) => descorator(serialize(func, props(...arg)))
+  func.keys = (...arg) => descorator(serialize(func, keys(...arg)))
   func.filter = (...arg) => descorator(serialize(func, filter(...arg)))
   func.each = (...arg) => descorator(serialize(func, each(...arg)))
 

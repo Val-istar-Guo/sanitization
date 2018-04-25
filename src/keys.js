@@ -2,12 +2,12 @@ import object from './object'
 import { identify, isObject, typeError, once } from './utils'
 
 
-const props = rules => {
+const keys = rules => {
   rules = Object.entries(rules)
     .map(([key, validator]) => {
-      if (isObject(validator)) validator = once(props(validator))
+      if (isObject(validator)) validator = once(keys(validator))
       if (typeof validator !== 'function')
-        throw typeError(`props expect rules should be function or object, but ${key} is ${typeof validator}`)
+        throw typeError(`keys expect rules should be function or object, but ${key} is ${typeof validator}`)
       return [key, validator]
     })
 
@@ -34,4 +34,4 @@ const props = rules => {
   }
 }
 
-export default props;
+export default keys;

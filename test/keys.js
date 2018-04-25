@@ -3,7 +3,7 @@ import sa from '../src'
 
 
 
-test('# sa.props should output object and accept object as rules', t => {
+test('# sa.keys should output object and accept object as rules', t => {
   const data = {
     // 有效字符串
     productName: '123',
@@ -27,7 +27,7 @@ test('# sa.props should output object and accept object as rules', t => {
     extra: 'extra prop should be throw',
   }
 
-  const sanitize = sa.props({
+  const sanitize = sa.keys({
     productName: sa.string,
     rate: sa.string,
     type: sa.number,

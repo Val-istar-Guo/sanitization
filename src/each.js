@@ -1,10 +1,10 @@
 import array from './array'
-import props from './props'
+import keys from './keys'
 import { identify, isObject, typeError, once } from './utils'
 
 
 export default validator => {
-  if (isObject(validator)) validator = once(props(validator))
+  if (isObject(validator)) validator = once(keys(validator))
   if (typeof validator !== 'function')
     throw typeError(`each expect rules should be function or object, but get ${typeof validator}`)
 

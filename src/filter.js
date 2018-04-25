@@ -1,11 +1,11 @@
-import props from './props'
+import keys from './keys'
 import array from './array'
 import { identify, isObject, once } from './utils'
 
 
 
 export default validator => {
-  if (isObject(validator)) validator = once(props(validator))
+  if (isObject(validator)) validator = once(keys(validator))
   if (typeof validator !== 'function') throw new Error()
 
   return next => context => {
