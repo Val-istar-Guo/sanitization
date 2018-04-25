@@ -1,8 +1,11 @@
-export default next => context => {
-  const { value } = context;
+import { type } from './utils'
 
-  if (typeof value !== 'boolean') context.value = !!value;
+
+export default next => context => {
+  const { value } = context
+
+  if (type(value) !== 'boolean') context.value = !!value
 
   context.expect = 'boolean'
-  return next(context);
+  return next(context)
 }

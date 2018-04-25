@@ -5,8 +5,11 @@ export const isObject = value =>
 
 export const typeError = string => new TypeError(`[Sanitization Error] ${string}`)
 export const appError = string => new Error(`[Sanitization Error] ${string}`)
+
 export const warn = string => console.warn(`[Sanitization Warn] ${string}`)
+
 export const type = value => {
+  // array, object, number, string, boolean, function, null, undefined, NaN
   if (Array.isArray(value)) return 'array'
   else if (value === null) return 'null'
   else if (typeof value === 'number' && isNaN(value)) return 'NaN'

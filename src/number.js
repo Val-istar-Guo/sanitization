@@ -1,10 +1,13 @@
+import { type } from './utils'
+
+
 export default next => context => {
   let { value, origin } = context
 
-  if (typeof value === 'string' || typeof value === 'boolean') context.value = Number(value)
-  else if (typeof value !== 'number') context.value = NaN
+  if (type(value) === 'string' || type(value) === 'boolean') context.value = Number(value)
+  else if (type(value) !== 'number') context.value = NaN
 
-  if (value === origin && typeof value === 'string' && value.length && !isNaN(context.value)) {
+  if (value === origin && type(value) === 'string' && value.length && !isNaN(context.value)) {
     context.origin = context.value
   }
 

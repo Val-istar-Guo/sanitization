@@ -1,8 +1,11 @@
+import { type } from './utils'
+
+
 export default next => context => {
   const { value } = context
 
   if (
-    typeof value !== 'object' ||
+    type(value) !== 'object' ||
     value === null ||
     Array.isArray(value)
   ) context.value = {}
