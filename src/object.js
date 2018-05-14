@@ -1,16 +1,16 @@
 import { type } from './utils'
 
 
-export default next => context => {
-  const { value } = context
+export default (next, context) => {
+  context.type = 'object'
 
-  if (
-    type(value) !== 'object' ||
-    value === null ||
-    Array.isArray(value)
-  ) context.value = {}
+  return () => {
+    const { value } = context
 
-  context.expect = 'object'
-  context.pass = true
-  return next(context)
+    if (type(value) !== 'object') context.value = {}
+
+    context.pass = true
+
+    next()
+  }
 }

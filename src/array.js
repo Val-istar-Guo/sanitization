@@ -1,9 +1,16 @@
-export default next => context => {
-  const { value } = context
+import { type } from './utils'
 
-  if (!Array.isArray(value)) context.value = []
 
-  context.expect = 'array'
-  context.pass = true
-  return next(context)
+export default (next, context) => {
+  context.type = 'array'
+
+  return () => {
+    const { value } = context
+
+    if (type(value) !== 'array') context.value = []
+
+    context.pass = true
+
+    next()
+  }
 }

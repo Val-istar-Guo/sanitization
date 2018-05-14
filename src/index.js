@@ -1,4 +1,4 @@
-import { identify } from './utils'
+import { identify, appError } from './utils'
 import array from './array'
 import string from './string';
 import number from './number'
@@ -9,42 +9,53 @@ import filter from './filter'
 import each from './each'
 import keys from './keys'
 
-import req from './require'
-import def from './default'
-import len from './length'
+import required from './required'
+import defaulted from './defaulted'
+
+import min from './min'
+import max from './max'
 
 
-const serialize = (func, wrap) => (value, error = true, next = identify) => {
-  // console.log('serialize: ', func, value, func(value))
-  return func(value, error, wrap(next))
+const serialize = (func, wrap, context) => (value, error = true, next = identify) => {
+  return func(value, error, wrap(next, context), context)
 }
 
-const descorator = func => {
-  Object.defineProperty(func, 'string', { get: () =>  descorator(serialize(func, string)) })
-  Object.defineProperty(func, 'stringify', { get: () =>  descorator(serialize(func, string)) })
-  Object.defineProperty(func, 'number', { get: () => descorator(serialize(func, number)) })
-  Object.defineProperty(func, 'array', { get: () => descorator(serialize(func, array)) })
-  Object.defineProperty(func, 'object', { get: () => descorator(serialize(func, object)) })
-  Object.defineProperty(func, 'bool', { get: () => descorator(serialize(func, bool)) })
+const createGetter = (deep, context, func, next) => {
+  if (!deep) context = {}
+  return descorator(serialize(func, next, context), deep + 1, context)
+}
 
-  func.keys = (...arg) => descorator(serialize(func, keys(...arg)))
-  func.filter = (...arg) => descorator(serialize(func, filter(...arg)))
-  func.each = (...arg) => descorator(serialize(func, each(...arg)))
+const descorator = (func, deep = 0, context) => {
+  Object.defineProperty(func, 'string', { get: () =>  createGetter(deep, context, func, string) })
+  Object.defineProperty(func, 'stringify', { get: () =>  createGetter(deep, context, func, string) })
+  Object.defineProperty(func, 'number', { get: () => createGetter(deep, context, func, number) })
+  Object.defineProperty(func, 'array', { get: () => createGetter(deep, context, func, array) })
+  Object.defineProperty(func, 'object', { get: () => createGetter(deep, context, func, object) })
+  Object.defineProperty(func, 'bool', { get: () => createGetter(deep, context, func, bool) })
 
-  func.default = (...arg) => descorator(serialize(func, def(...arg)))
-  func.require = (...arg) => descorator(serialize(func, req(...arg)))
-  func.len = (...arg) => descorator(serialize(func, len(...arg)))
+  func.keys = (...arg) => createGetter(deep, context, func, keys(...arg))
+  func.filter = (...arg) => createGetter(deep, context, func, filter(...arg))
+  func.each = (...arg) => createGetter(deep, context, func, each(...arg))
+
+  func.defaulted = (...arg) => createGetter(deep, context, func, defaulted(...arg))
+  func.required = (...arg) => createGetter(deep, context, func, required(...arg))
+
+  func.min = (...arg) => createGetter(deep, context, func, min(...arg))
+  func.max = (...arg) => createGetter(deep, context, func, max(...arg))
 
   return func;
 }
 
-export default descorator((value, error = true, next = identify) => {
-  let context = { value, origin: value, pass: true }
-  context = next(context)
+export default descorator((value, error = true, next = identify, context) => {
+  context.value = value
+  context.origin = value
+  context.pass = true
+
+  next()
 
   if (error) {
     if (context.pass) return context.value;
-    else throw new Error('')
+    else throw appError(`unexpect value: ${value}`)
   }
 
   return context;

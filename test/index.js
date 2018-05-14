@@ -89,24 +89,23 @@ test('# sa', t => {
         units: [
           { id: 3, name: '拖把', number: 1, price: 75, photos: [{ url: 'xxx'}] },
         ],
-        //
-        promotionPrice: '40',
+        promotionPrice: 40,
       },
     ]
   }
 
   const santize = sa.keys({
     name: sa.string,
-    minPrice: sa.number.require(),
+    minPrice: sa.number.required(),
     products: sa.filter({
-      units: sa.len(1).each({
-        id: sa.number.require(),
+      units: sa.min(1).each({
+        id: sa.number.required(),
         name: sa.string,
-        number: sa.number.require(),
+        number: sa.number.required(),
         price: sa.number,
         photos: sa.array,
       }),
-      promotionPrice: sa.number.require()
+      promotionPrice: sa.number.required()
     })
   })
 

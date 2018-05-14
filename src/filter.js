@@ -1,21 +1,17 @@
 import keys from './keys'
 import array from './array'
-import { identify, isObject, once } from './utils'
-
+import { type, typeError, serialize, once } from './utils'
 
 
 export default validator => {
-  if (isObject(validator)) validator = once(keys(validator))
-  if (typeof validator !== 'function') throw new Error()
+  if (type(validator) === 'object') validator = once(keys(validator))
+  if (type(validator) !== 'function') throw typeError(`filter expect rules should be function or object, but ${key} is ${type(validator)}`)
 
-  return next => context => {
-    context = array(identify)(context)
-    const { value } = context
-
-    context.value = value.map(item => validator(item, false))
+  return serialize(array, (next, context) => () => {
+    context.value = context.value.map(item => validator(item, false))
       .filter(({ pass }) => pass)
       .map(({ value }) => value)
 
-    return next(context)
-  }
+    next()
+  })
 }

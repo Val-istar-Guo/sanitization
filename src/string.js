@@ -1,14 +1,17 @@
 import { type } from './utils'
 
 
-export default next => context => {
-  const { value } = context
+export default (next, context) => {
+  context.type = 'string'
 
-  if (type(value) === 'number' && !isNaN(value)) context.value = `${value}`
-  else if (type(value) !== 'string') context.value = ''
+  return () => {
+    const { value } = context
 
-  context.expect = 'string'
-  context.pass = true
+    if (type(value) === 'number') context.value = `${value}`
+    else if (type(value) !== 'string') context.value = ''
 
-  return next(context);
+    context.pass = true
+
+    next();
+  }
 }

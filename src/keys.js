@@ -1,18 +1,17 @@
 import object from './object'
-import { identify, isObject, typeError, once } from './utils'
+import { type, typeError, once, serialize, identify } from './utils'
 
 
 const keys = rules => {
   rules = Object.entries(rules)
     .map(([key, validator]) => {
-      if (isObject(validator)) validator = once(keys(validator))
-      if (typeof validator !== 'function')
-        throw typeError(`keys expect rules should be function or object, but ${key} is ${typeof validator}`)
+      if (type(validator) === 'object') validator = once(keys(validator))
+      if (type(validator) !== 'function')
+        throw typeError(`keys expect rules should be function or object, but ${key} is ${type(validator)}`)
       return [key, validator]
     })
 
-  return next => context => {
-    context = object(identify)(context);
+  return serialize(object, (next, context) => () => {
     const { value } = context;
 
     const result = {};
@@ -22,7 +21,7 @@ const keys = rules => {
 
       if (!ctx.pass) {
         context.pass = false;
-        return context;
+        return
       }
 
       result[key] = ctx.value;
@@ -30,8 +29,8 @@ const keys = rules => {
 
     context.value = result;
     context.pass = true;
-    return next(context)
-  }
+    next()
+  })
 }
 
 export default keys;

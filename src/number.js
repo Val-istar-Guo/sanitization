@@ -1,17 +1,17 @@
 import { type } from './utils'
 
 
-export default next => context => {
-  let { value, origin } = context
+export default (next, context) => {
+  context.type = 'number'
 
-  if (type(value) === 'string' || type(value) === 'boolean') context.value = Number(value)
-  else if (type(value) !== 'number') context.value = NaN
+  return () => {
+    let { value, origin } = context
 
-  if (value === origin && type(value) === 'string' && value.length && !isNaN(context.value)) {
-    context.origin = context.value
+    // if value is number-like string
+    if (type(value) === 'string' && /^\d+(\.\d+)?$/) context.value = Number(value)
+    else if (type(value) !== 'number') context.value = NaN
+
+    context.pass = true
+    next()
   }
-
-  context.expect = 'number'
-  context.pass = true
-  return next(context)
 }

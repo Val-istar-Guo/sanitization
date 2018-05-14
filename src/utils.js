@@ -17,4 +17,12 @@ export const type = value => {
   return typeof value
 }
 
-export const once = func => value => func(identify)({ value })
+export const once = func => value => {
+  const context = { value, origin: value, pass: true }
+  func(identify, context)()
+  return context
+}
+
+export const serialize = (a, b) => (next, context) => {
+  return a(b(next, context), context)
+}

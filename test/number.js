@@ -12,13 +12,6 @@ test('# sa.number should output NaN when input is undefined, null, array, object
   t.is(sa.number([]), NaN)
   t.is(sa.number({}), NaN)
   t.is(sa.number(() => {}), NaN)
-})
-
-test('# sa.number should output 0/1 when input is false/true', t => {
-  t.is(sa.number(false), 0)
-  t.is(sa.number(true), 1)
-})
-
-test("# sa.number.require() should output 12345(number) when input '12345'(string)", t => {
-  t.is(sa.number.require()('12345'), 12345)
+  t.is(sa.number(false), NaN)
+  t.is(sa.number(true), NaN)
 })

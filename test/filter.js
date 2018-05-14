@@ -13,7 +13,7 @@ test('# sa.filter should filter item that not pass', t => {
   ]
 
   const sanitize = sa.filter({
-    title: sa.string.require(),
+    title: sa.string.required(),
     content: sa.string,
   })
 

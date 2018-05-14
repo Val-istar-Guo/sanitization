@@ -31,7 +31,7 @@ test('# sa.keys should output object and accept object as rules', t => {
     productName: sa.string,
     rate: sa.string,
     type: sa.number,
-    id: sa.number.default(0),
+    id: sa.number.defaulted(0),
     photos: sa.array,
     products: sa.array,
     rule: {
@@ -55,6 +55,5 @@ test('# sa.keys should output object and accept object as rules', t => {
     },
   }
 
-  // console.log(sanitize(data), result);
   t.deepEqual(sanitize(data), result)
 });
