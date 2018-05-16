@@ -80,7 +80,7 @@ const santize = sa.props({
   name: sa.string,
   minPrice: sa.number.required(),
   products: sa.filter({
-    units: sa.len(1).each({
+    units: sa.min(1).each({
       id: sa.number.required(),
       name: sa.string,
       number: sa.number.required(),

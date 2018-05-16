@@ -24,30 +24,33 @@ const serialize = (func, wrap, context) => (value, error = true, next = identify
   return func(value, error, wrap(next, context), context)
 }
 
-const createGetter = (deep, context, func, next) => {
+const createNext = (deep, context, func) => next => {
   if (!deep) context = {}
   return descorator(serialize(func, next, context), deep + 1, context)
 }
 
 const descorator = (func, deep = 0, context) => {
-  Object.defineProperty(func, 'string', { get: () =>  createGetter(deep, context, func, string) })
-  Object.defineProperty(func, 'stringify', { get: () =>  createGetter(deep, context, func, string) })
-  Object.defineProperty(func, 'number', { get: () => createGetter(deep, context, func, number) })
-  Object.defineProperty(func, 'array', { get: () => createGetter(deep, context, func, array) })
-  Object.defineProperty(func, 'object', { get: () => createGetter(deep, context, func, object) })
-  Object.defineProperty(func, 'bool', { get: () => createGetter(deep, context, func, bool) })
+  const next = createNext(deep, context, func)
+  Object.defineProperties(func, {
+    string: { get: () => next(string) },
+    stringify: { get: () => next(string) },
+    number: { get: () => next(number) },
+    array: { get: () => next(array) },
+    object: { get: () => next(object) },
+    bool: { get: () => next(bool) },
+  })
 
-  func.keys = (...arg) => createGetter(deep, context, func, keys(...arg))
-  func.filter = (...arg) => createGetter(deep, context, func, filter(...arg))
-  func.each = (...arg) => createGetter(deep, context, func, each(...arg))
+  func.keys = (...arg) => next(keys(...arg))
+  func.filter = (...arg) => next(filter(...arg))
+  func.each = (...arg) => next(each(...arg))
 
-  func.defaulted = (...arg) => createGetter(deep, context, func, defaulted(...arg))
-  func.required = (...arg) => createGetter(deep, context, func, required(...arg))
+  func.defaulted = (...arg) => next(defaulted(...arg))
+  func.required = (...arg) => next(required(...arg))
 
-  func.regexp = (...arg) => createGetter(deep, context, func, regexp(...arg))
+  func.regexp = (...arg) => next(regexp(...arg))
 
-  func.min = (...arg) => createGetter(deep, context, func, min(...arg))
-  func.max = (...arg) => createGetter(deep, context, func, max(...arg))
+  func.min = (...arg) => next(min(...arg))
+  func.max = (...arg) => next(max(...arg))
 
   return func;
 }
