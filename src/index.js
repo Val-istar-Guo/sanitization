@@ -1,16 +1,20 @@
 import { identify, appError } from './utils'
-import array from './array'
-import string from './string';
-import number from './number'
-import object from './object'
-import bool from './bool'
 
+import string from './string';
+import regexp from './regexp'
+
+import array from './array'
 import filter from './filter'
 import each from './each'
+
+import object from './object'
 import keys from './keys'
 
 import required from './required'
 import defaulted from './defaulted'
+
+import number from './number'
+import bool from './bool'
 
 import min from './min'
 import max from './max'
@@ -39,6 +43,8 @@ const descorator = (func, deep = 0, context) => {
 
   func.defaulted = (...arg) => createGetter(deep, context, func, defaulted(...arg))
   func.required = (...arg) => createGetter(deep, context, func, required(...arg))
+
+  func.regexp = (...arg) => createGetter(deep, context, func, regexp(...arg))
 
   func.min = (...arg) => createGetter(deep, context, func, min(...arg))
   func.max = (...arg) => createGetter(deep, context, func, max(...arg))
