@@ -3,15 +3,13 @@ import sa from '../src'
 
 
 test('# sa.defaulted should return origin value when input is expected', t => {
-  t.is(sa.number.defaulted()(1), 1)
-  t.is(sa.string.defaulted()('string'), 'string')
-
-  t.true(sa.bool.defaulted()(true))
+  t.is(sa.number.defaulted(2)(1), 1)
+  t.false(sa.bool.defaulted(false)('1'))
 
   const arr = []
-  t.is(sa.array.defaulted()(arr), arr)
+  t.is(sa.array.defaulted([1, 2, 3])(arr), arr)
   const obj = {}
-  t.is(sa.object.defaulted()(obj), obj)
+  t.is(sa.object.defaulted({ a: 1 })(obj), obj)
 })
 
 test('# sa.defaulted should return defaulted value when input is not expected', t => {
@@ -27,6 +25,6 @@ test('# sa.defaulted should return defaulted value when input is not expected', 
 })
 
 
-test('# sa.defaulted should throw error when called individually', t => {
-  t.throws(() => sa.defaulted()(), '[Sanitization Error] defaulted should not be called individually')
+test('# sa.defaulted should throw error when called no param', t => {
+  t.throws(() => sa.defaulted()('123'), '[Sanitization Error] defaulted expect a param')
 })

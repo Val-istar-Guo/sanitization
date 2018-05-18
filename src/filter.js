@@ -9,7 +9,7 @@ export default validator => {
 
   return serialize(array, (next, context) => () => {
     context.value = context.value.map(item => validator(item, false))
-      .filter(({ pass }) => pass)
+      .filter(({ error }) => !error)
       .map(({ value }) => value)
 
     next()

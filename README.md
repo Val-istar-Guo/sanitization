@@ -78,16 +78,16 @@ const dirtyData = {
 
 const santize = sa.props({
   name: sa.string,
-  minPrice: sa.number.required(),
+  minPrice: sa.number.required,
   products: sa.filter({
     units: sa.min(1).each({
-      id: sa.number.required(),
+      id: sa.number.required,
       name: sa.string,
-      number: sa.number.required(),
+      number: sa.number.required,
       price: sa.number,
       photos: sa.array,
     }),
-    promotionPrice: sa.number.required()
+    promotionPrice: sa.number.required
   })
 })
 

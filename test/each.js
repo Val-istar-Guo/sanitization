@@ -13,7 +13,7 @@ test('# sa.each should throw error when some one not pass', t => {
   ]
 
   const sanitize = sa.each({
-    title: sa.string.required(),
+    title: sa.string.required,
     content: sa.string,
   })
 
@@ -36,7 +36,7 @@ test('# sa.each should not throw error when some one not pass', t => {
   ]
 
   const sanitize = sa.each({
-    title: sa.string.required(),
+    title: sa.string.required,
     content: sa.string,
   })
 

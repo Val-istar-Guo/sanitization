@@ -1,4 +1,4 @@
-import { type } from './utils'
+import { type, isRequired, unSetDefaulted } from './utils'
 
 
 export default (next, context) => {
@@ -7,11 +7,14 @@ export default (next, context) => {
   return () => {
     let { value, origin } = context
 
-    // if value is number-like string
-    if (type(value) === 'string' && /^\d+(\.\d+)?$/) context.value = Number(value)
-    else if (type(value) !== 'number') context.value = NaN
+    if (type(value) !== 'number') {
+      if (isRequired(context)) context.error = { expect: 'number', actual: type(value) }
+      else if (unSetDefaulted(context)) {
+        if (type(value) === 'string' && /^\d+(\.\d+)?$/) context.value = Number(value)
+        else context.value = NaN
+      }
+    }
 
-    context.pass = true
-    next()
+    if (!context.error) next()
   }
 }

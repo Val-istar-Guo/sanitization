@@ -1,4 +1,4 @@
-import { type } from './utils'
+import { type, isRequired, unSetDefaulted } from './utils'
 
 
 export default (next, context) => {
@@ -7,8 +7,11 @@ export default (next, context) => {
   return () => {
     const { value } = context
 
-    if (type(value) !== 'boolean') context.value = !!value
+    if (type(value) !== 'boolean') {
+      if (isRequired(context)) context.error = { expect: 'boolean', actual: type(value) }
+      else if (unSetDefaulted(context)) context.value = !!value
+    }
 
-    next()
+    if (!context.error) next()
   }
 }

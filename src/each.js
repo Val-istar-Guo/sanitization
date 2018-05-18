@@ -17,15 +17,14 @@ export default validator => {
       for (let item of value) {
         const ctx = validator(item, false)
 
-        if (!ctx.pass) {
-          context.pass = false
-          return context
+        if (ctx.error) {
+          context.error = ctx.error
+          return
         }
 
         result.push(ctx.value)
       }
 
-      context.pass = true
       context.value = result
       next()
     }

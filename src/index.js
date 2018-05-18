@@ -38,6 +38,7 @@ const descorator = (func, deep = 0, context) => {
     array: { get: () => next(array) },
     object: { get: () => next(object) },
     bool: { get: () => next(bool) },
+    required: { get: () => next(required) },
   })
 
   func.keys = (...arg) => next(keys(...arg))
@@ -45,7 +46,6 @@ const descorator = (func, deep = 0, context) => {
   func.each = (...arg) => next(each(...arg))
 
   func.defaulted = (...arg) => next(defaulted(...arg))
-  func.required = (...arg) => next(required(...arg))
 
   func.regexp = (...arg) => next(regexp(...arg))
 
@@ -58,12 +58,12 @@ const descorator = (func, deep = 0, context) => {
 export default descorator((value, error = true, next = identify, context) => {
   context.value = value
   context.origin = value
-  context.pass = true
+  context.error = null
 
   next()
 
   if (error) {
-    if (context.pass) return context.value;
+    if (!context.error) return context.value;
     else throw appError(`unexpect value: ${value}`)
   }
 

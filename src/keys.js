@@ -1,5 +1,5 @@
 import object from './object'
-import { type, typeError, once, serialize, identify } from './utils'
+import { type, typeError, once, serialize } from './utils'
 
 
 const keys = rules => {
@@ -19,8 +19,8 @@ const keys = rules => {
     for (let [key, validator] of rules) {
       const ctx = validator(value[key], false);
 
-      if (!ctx.pass) {
-        context.pass = false;
+      if (ctx.error) {
+        context.error = ctx.error
         return
       }
 
@@ -28,7 +28,7 @@ const keys = rules => {
     }
 
     context.value = result;
-    context.pass = true;
+
     next()
   })
 }

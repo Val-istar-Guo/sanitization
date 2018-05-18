@@ -1,4 +1,4 @@
-import { type } from './utils'
+import { type, isRequired, unSetDefaulted } from './utils'
 
 
 export default (next, context) => {
@@ -7,11 +7,14 @@ export default (next, context) => {
   return () => {
     const { value } = context
 
-    if (type(value) === 'number') context.value = `${value}`
-    else if (type(value) !== 'string') context.value = ''
+    if (type(value) !== 'string') {
+      if (isRequired(context)) context.error = { expect: 'string', actual: type(value) }
+      else if (unSetDefaulted(context)) {
+        if (type(value) === 'number') context.value = `${value}`
+        else context.value = ''
+      }
+    }
 
-    context.pass = true
-
-    next();
+    if (!context.error) next();
   }
 }
