@@ -54,6 +54,8 @@ const descorator = (func, deep = 0, context) => {
   func.min = (...arg) => next(min(...arg))
   func.max = (...arg) => next(max(...arg))
   func.valid = (...arg) => next(valid(...arg))
+  // func.oneOf = (...arg) => next(valid(...arg))
+  func.oneOf = func.valid
 
   return func;
 }
