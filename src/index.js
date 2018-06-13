@@ -19,13 +19,15 @@ import bool from './bool'
 import min from './min'
 import max from './max'
 
+import valid from './valid'
+
 
 const serialize = (func, wrap, context) => (value, error = true, next = identify) => {
   return func(value, error, wrap(next, context), context)
 }
 
 const createNext = (deep, context, func) => next => {
-  if (!deep) context = {}
+  if (!deep) context = { error: null, whiteList: [] }
   return descorator(serialize(func, next, context), deep + 1, context)
 }
 
@@ -51,6 +53,7 @@ const descorator = (func, deep = 0, context) => {
 
   func.min = (...arg) => next(min(...arg))
   func.max = (...arg) => next(max(...arg))
+  func.valid = (...arg) => next(valid(...arg))
 
   return func;
 }

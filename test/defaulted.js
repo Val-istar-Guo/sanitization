@@ -25,6 +25,6 @@ test('# sa.defaulted should return defaulted value when input is not expected', 
 })
 
 
-test('# sa.defaulted should throw error when called no param', t => {
-  t.throws(() => sa.defaulted()('123'), '[Sanitization Error] defaulted expect a param')
+test('# sa.defaulted should throw error when called no argument', t => {
+  t.throws(() => sa.defaulted()('123'), '[Sanitization Error] defaulted expect a argument')
 })

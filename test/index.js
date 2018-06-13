@@ -83,7 +83,7 @@ test('# sa', t => {
          * 但是接口返回的是个字符串
          * 我们更期望是一个数字
          */
-        promotionPrice: '10',
+        promotionPrice: '15',
       },
       {
         units: [

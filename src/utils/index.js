@@ -14,7 +14,7 @@ export const type = value => {
 }
 
 export const once = func => value => {
-  const context = { value, origin: value, error: null }
+  const context = { value, origin: value, error: null, whiteList: [] }
   func(identify, context)()
   return context
 }
@@ -32,10 +32,17 @@ export const isRequired = (context, error) => {
   return false
 }
 
-export const unSetDefaulted = context => {
+export const unSetDefaulted = (context, valid) => {
   if ('defaultValue' in context) {
     context.value = context.defaultValue
+    if (!valid(context.defaultValue)) warn(`The default value(${context.defaultValue}) is illegal.`)
     return false
+  } else if ('whiteList' in context && type(context.whiteList) === 'array') {
+    context.whiteList = context.whiteList.filter(valid)
+    if (context.whiteList.length) {
+      context.value = context.whiteList[0]
+      return false
+    }
   }
 
   return true
