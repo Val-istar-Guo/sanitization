@@ -1,5 +1,5 @@
 import object from './object'
-import { type, typeError, once, serialize } from './utils'
+import { _, type, typeError, once, serialize } from './utils'
 
 
 const keys = rules => {
@@ -24,7 +24,7 @@ const keys = rules => {
         return
       }
 
-      result[key] = ctx.value;
+      if (ctx.value !== undefined) result[key] = ctx.value;
     }
 
     context.value = result;

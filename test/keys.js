@@ -23,6 +23,7 @@ test('# sa.keys should output object and accept object as rules', t => {
       min: 0,
       canEdit: 1,
     },
+    undefinedValue: undefined,
 
     extra: 'extra prop should be throw',
   }
@@ -39,6 +40,7 @@ test('# sa.keys should output object and accept object as rules', t => {
       min: sa.number,
       canEdit: sa.bool,
     },
+    undefinedValue: sa.any,
   })
 
   const result = {
