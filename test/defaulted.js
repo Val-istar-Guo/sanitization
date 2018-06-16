@@ -22,6 +22,7 @@ test('# sa.defaulted should return defaulted value when input is not expected', 
   const obj = { a: 'a' }
   t.is(sa.object.defaulted(obj)(''), obj)
   t.is(sa.string.defaulted('string')(1), 'string')
+  t.is(sa.bool.defaulted(undefined)(1), undefined)
 })
 
 
