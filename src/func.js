@@ -8,7 +8,7 @@ export default (next, context) => {
   return () => {
     const { value } = context
 
-    if (type(value) !== 'function') {
+    if (!valid(value)) {
       if (isRequired(context)) context.error = { expect: 'function', actual: type(value) }
       else if (unSetDefaulted(context, valid)) context.value = () => {}
     }
