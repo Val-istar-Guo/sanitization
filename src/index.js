@@ -23,6 +23,7 @@ import min from './min'
 import max from './max'
 
 import valid from './valid'
+import expect from './expect'
 
 
 const serialize = (func, wrap, context) => (value, error = true, next = identify) => {
@@ -61,6 +62,7 @@ const descorator = (func, deep = 0, context) => {
   func.valid = (...arg) => next(valid(...arg))
   // func.oneOf = (...arg) => next(valid(...arg))
   func.oneOf = func.valid
+  func.expect = (...arg) => next(expect(...arg))
 
   return func;
 }
