@@ -1,4 +1,4 @@
-import { type } from './utils'
+import { type, isRequired, unSetDefaulted } from './utils'
 
 
 const valid = value => type(value) === 'function'
