@@ -1,5 +1,8 @@
 import { identify, appError } from './utils'
 
+import f from './func'
+import any from './any'
+
 import string from './string';
 import regexp from './regexp'
 
@@ -40,7 +43,9 @@ const descorator = (func, deep = 0, context) => {
     array: { get: () => next(array) },
     object: { get: () => next(object) },
     bool: { get: () => next(bool) },
+    func: { get: () => next(f) },
     required: { get: () => next(required) },
+    any: { get: () => next(any) }
   })
 
   func.keys = (...arg) => next(keys(...arg))
