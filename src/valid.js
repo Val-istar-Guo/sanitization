@@ -8,9 +8,10 @@ import { serialize, isRequired, type, typeError, warn, unSetDefaulted } from './
 
 // OPTIMIZE: object, array need deep equal
 export default enums => {
-  if (type(enums) !== 'array' || !enums.length) {
-    throw typeError('enum expect an non-null array type argument')
-  }
+  if (type(enums) === 'object') enums = Object.values(enums)
+  else if (type(enums) !== 'array' || !enums.length) {
+    throw typeError('enum expect a non-null array or object as a parameter')
+}
 
   const types = enums.map(type)
   const perdictType = types[0]
