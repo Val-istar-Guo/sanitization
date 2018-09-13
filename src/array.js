@@ -2,17 +2,17 @@ import { type, isRequired, unSetDefaulted } from './utils'
 
 
 const valid = value => type(value) === 'array'
-export default (next, context) => {
-  context.type = 'array'
+export default (ctx, next) => {
+  ctx.type = 'array'
 
   return () => {
-    const { value } = context
+    const { value } = ctx
 
     if (!valid(value)) {
-      if (isRequired(context)) context.error = { expect: 'array', actual: type(value) }
-      else if (unSetDefaulted(context, valid)) context.value = []
+      if (isRequired(ctx)) ctx.error = { expect: 'array', actual: type(value) }
+      else if (unSetDefaulted(ctx, valid)) ctx.value = []
     }
 
-    if (!context.error) next()
+    if (!ctx.error) next()
   }
 }

@@ -1,14 +1,22 @@
 import keys from './keys'
 import array from './array'
-import { type, typeError, serialize, once } from './utils'
+import { type, typeError, combine, drive } from './utils'
 
 
 export default validator => {
-  if (type(validator) === 'object') validator = once(keys(validator))
-  if (type(validator) !== 'function') throw typeError(`filter expect rules should be function or object, but ${key} is ${type(validator)}`)
+  if (type(validator) === 'object') validator = drive(keys(validator))
+  if (type(validator) !== 'function') throw typeError(`filter expect rules should be function or object, but get ${type(validator)}`)
 
-  return serialize(array, (next, context) => () => {
-    context.value = context.value.map(item => validator(item, false))
+  return combine(array, (ctx, next) => () => {
+    ctx.value = ctx.value
+      .map(item => {
+        try {
+          const value = validator(item)
+          return { value }
+        } catch (error) {
+          return { error }
+        }
+      })
       .filter(({ error }) => !error)
       .map(({ value }) => value)
 

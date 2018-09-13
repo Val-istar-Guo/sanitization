@@ -1,32 +1,33 @@
 import array from './array'
 import keys from './keys'
-import { type, serialize, typeError, once } from './utils'
+import { type, combine, typeError, drive } from './utils'
 
 
 export default validator => {
-  if (type(validator) === 'object') validator = once(keys(validator))
-  if (type(validator) !== 'function')
+  if (type(validator) === 'object') validator = drive(keys(validator))
+  if (type(validator) !== 'function') {
     throw typeError(`each expect rules should be function or object, but get ${type(validator)}`)
+  }
 
-  return serialize(array, (next, context) => {
+  const each = (ctx, next) => {
     return () => {
-      const { value } = context
-
       const result = []
 
-      for (let item of value) {
-        const ctx = validator(item, false)
-
-        if (ctx.error) {
-          context.error = ctx.error
+      for (let item of ctx.value) {
+        try {
+          const value = validator(item)
+          result.push(value)
+        } catch (err) {
+          console.log('eeeeeeeeeeeee', err)
+          ctx.error = err
           return
         }
-
-        result.push(ctx.value)
       }
 
-      context.value = result
+      ctx.value = result
       next()
     }
-  })
+  }
+
+  return combine(array, each)
 }

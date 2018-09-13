@@ -1,7 +1,5 @@
-import { appError, type } from './utils';
-
-export default (next, context) => {
-  context.required = true
+export default (ctx, next) => {
+  ctx.required = true
 
   return () => next()
 }

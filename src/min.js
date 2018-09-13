@@ -1,77 +1,77 @@
 import number from './number'
 import string from './string'
 import array from './array'
-import { type, typeError, warn, isRequired, unSetDefaulted, serialize } from './utils'
+import { type, typeError, warn, isRequired, unSetDefaulted, combine } from './utils'
 
 
-const minNumber = min => (next, context) => {
+const minNumber = min => (ctx, next) => {
   const valid = value => type(value) === 'number' && value >= min
 
   return () => {
-    const { value } = context
+    const { value } = ctx
 
     if (type(value) !== 'number') {
-      if (isRequired(context)) context.error = { expect: 'number', actual: type(value) }
-      else if (unSetDefaulted(context, valid)) context.value = min
+      if (isRequired(ctx)) ctx.error = { expect: 'number', actual: type(value) }
+      else if (unSetDefaulted(ctx, valid)) ctx.value = min
     } else if (value < min) {
-      if (isRequired(context)) context.error = { expect: `greater than ${min}`, actual: value }
-      else if (unSetDefaulted(context, valid)) context.value = min
+      if (isRequired(ctx)) ctx.error = { expect: `greater than ${min}`, actual: value }
+      else if (unSetDefaulted(ctx, valid)) ctx.value = min
     }
 
-    if (!context.error) next()
+    if (!ctx.error) next()
   }
 }
 
-const minArray = min => (next, context) => {
+const minArray = min => (ctx, next) => {
   const valid = value => value.length >= min
 
   return () => {
-    const { value } = context
+    const { value } = ctx
 
     if (type(value) !== 'array') {
-      if (isRequired(context)) context.error = { expect: 'array', actual: type(value) }
-      else if (unSetDefaulted(context, valid)) context.value = new Array(min).fill(null)
+      if (isRequired(ctx)) ctx.error = { expect: 'array', actual: type(value) }
+      else if (unSetDefaulted(ctx, valid)) ctx.value = new Array(min).fill(null)
     } else if (value.length < min) {
-      if (isRequired(context, valid)) context.error = { expect: `length greater than ${min}`, actual: `length is ${value.length}`}
-      else context.value = context.value.concat(new Array(min - context.value.length).fill(null))
+      if (isRequired(ctx, valid)) ctx.error = { expect: `length greater than ${min}`, actual: `length is ${value.length}`}
+      else ctx.value = ctx.value.concat(new Array(min - ctx.value.length).fill(null))
     }
 
-    if (!context.error) next()
+    if (!ctx.error) next()
   }
 }
 
-const minString = min => (next, context) => {
+const minString = min => (ctx, next) => {
   const valid = value => value.length >= min
 
   return () => {
-    const { value } = context
+    const { value } = ctx
 
     if (type(value) !== 'string') {
-      if (isRequired(context)) context.error = { expect: 'string', actual: type(value) }
-      else if (unSetDefaulted(context, valid)) context.value = new Array(min).fill(' ').join('')
+      if (isRequired(ctx)) ctx.error = { expect: 'string', actual: type(value) }
+      else if (unSetDefaulted(ctx, valid)) ctx.value = new Array(min).fill(' ').join('')
     } else if (value.length < min) {
-      if (isRequired(context)) context.error = { expect: `length greater than ${min}`, actual: `length is ${value.length}` }
-      else if (unSetDefaulted(context, valid)) {
-        const arr = new Array(min - context.value.length)
-        context.value = `${context.value}${arr.fill(' ').join('')}`
+      if (isRequired(ctx)) ctx.error = { expect: `length greater than ${min}`, actual: `length is ${value.length}` }
+      else if (unSetDefaulted(ctx, valid)) {
+        const arr = new Array(min - ctx.value.length)
+        ctx.value = `${ctx.value}${arr.fill(' ').join('')}`
       }
     }
 
-    if (!context.error) next()
+    if (!ctx.error) next()
   }
 }
 
 export default (min) => {
   if (type(min) !== 'number') throw typeError(`min(value) value must be a number, but get ${type(min)}`)
 
-  return (next, context) => () => {
-    if (!('type' in context)) serialize(number, minNumber(min))(next, context)()
-    else if (context.type === 'number') serialize(number, minNumber(min))(next, context)()
-    else if (context.type === 'array') serialize(array, minArray(min))(next, context)()
-    else if (context.type === 'string') serialize(string, minString(min))(next, context)()
+  return (ctx, next) => () => {
+    if (!('type' in ctx)) combine(number, minNumber(min))(ctx, next)()
+    else if (ctx.type === 'number') combine(number, minNumber(min))(ctx, next)()
+    else if (ctx.type === 'array') combine(array, minArray(min))(ctx, next)()
+    else if (ctx.type === 'string') combine(string, minString(min))(ctx, next)()
     else {
       warn('min should be call when type is array, string or number')
-      if (!context.error) next()
+      if (!ctx.error) next()
     }
   }
 }

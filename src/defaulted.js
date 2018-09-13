@@ -1,9 +1,9 @@
 import { warn, type, appError, typeError } from './utils';
 
 
-export default (...arg) => (next, context) => {
+export default (...arg) => (ctx, next) => {
   if (!arg.length) throw typeError('defaulted expect a argument')
-  context.defaultValue =  arg[0];
+  ctx.defaultValue =  arg[0];
 
-  () => next()
+  return () => next()
 }

@@ -3,7 +3,7 @@ import bool from './bool'
 import string from './string'
 import object from './object'
 import array from './array'
-import { serialize, isRequired, type, typeError, warn, unSetDefaulted } from './utils'
+import { combine, isRequired, type, typeError, warn, unSetDefaulted } from './utils'
 
 
 // OPTIMIZE: object, array need deep equal
@@ -22,29 +22,29 @@ export default enums => {
     warn('The types of enumerated values in enmu are inconsistent.')
   }
 
-  const func = (next, context) => {
-    if (canPredict && !('type' in context)) context.type = perdictType
-    if (!('defaultValue' in context)) context.defaultValue = enums[0]
-    context.whiteList = context.whiteList.concat(enums);
+  const handler = (ctx, next) => {
+    if (canPredict && !('type' in ctx)) ctx.type = perdictType
+    if (!('defaultValue' in ctx)) ctx.defaultValue = enums[0]
+    ctx.whiteList = ctx.whiteList.concat(enums);
 
     return () => {
-      const { value } = context
+      const { value } = ctx
 
       if (!valid(value)) {
-        if (isRequired(context)) context.error = { expect: `one of [${enums.join(',')}]`, actual: value }
-        else if (unSetDefaulted(context, valid)) context.value = context.defaultValue
+        if (isRequired(ctx)) ctx.error = { expect: `one of [${enums.join(',')}]`, actual: value }
+        else if (unSetDefaulted(ctx, valid)) ctx.value = ctx.defaultValue
       }
 
-      if (!context.error) next()
+      if (!ctx.error) next()
     }
   }
 
   if (canPredict) {
-    if (perdictType === 'number') return serialize(number, func)
-    else if (perdictType === 'boolean') return serialize(bool, func)
-    else if (perdictType === 'string') return serialize(string, func)
-    else if (perdictType === 'object') return serialize(object, func)
-    else if (perdictType === 'array') return serialize(array, func)
-    else return func
+    if (perdictType === 'number') return combine(number, handler)
+    else if (perdictType === 'boolean') return combine(bool, handler)
+    else if (perdictType === 'string') return combine(string, handler)
+    else if (perdictType === 'object') return combine(object, handler)
+    else if (perdictType === 'array') return combine(array, handler)
+    else return handler
   } else return func
 }

@@ -1,1 +1,1 @@
-export default (next, context) => () => next()
+export default (ctx, next) => () => next()

@@ -1,13 +1,13 @@
 import { isRequired, unSetDefaulted } from './utils'
 
 
-export default valid => (next, context) => () => {
-  const { value } = context
+export default valid => (ctx, next) => () => {
+  const { value } = ctx
 
   if (!valid(value)) {
-    if (isRequired(context)) context.error = { expect: 'custom expect', actual: value }
-    else if (unSetDefaulted(context, valid)) context.value = null
+    if (isRequired(ctx)) ctx.error = { expect: 'custom expect', actual: value }
+    else if (unSetDefaulted(ctx, valid)) ctx.value = null
   }
 
-  if (!context.error) next()
+  if (!ctx.error) next()
 }

@@ -1,36 +1,34 @@
 import object from './object'
-import { _, type, typeError, once, serialize } from './utils'
-
+import { _, type, typeError, drive, combine } from './utils'
 
 const keys = rules => {
   rules = Object.entries(rules)
     .map(([key, validator]) => {
-      if (type(validator) === 'object') validator = once(keys(validator))
+      if (type(validator) === 'object') validator = drive(keys(validator))
       if (type(validator) !== 'function')
         throw typeError(`keys expect rules should be function or object, but ${key} is ${type(validator)}`)
       return [key, validator]
     })
 
-  return serialize(object, (next, context) => () => {
-    const { value } = context;
-
+  const handler = (ctx, next) => () => {
     const result = {};
 
     for (let [key, validator] of rules) {
-      const ctx = validator(value[key], false);
-
-      if (ctx.error) {
-        context.error = ctx.error
+      try {
+        const value = validator(ctx.value[key]);
+        if (value !== undefined) result[key] = value;
+      } catch (err) {
+        console.log('key err: ', err)
+        ctx.error = err
         return
       }
-
-      if (ctx.value !== undefined) result[key] = ctx.value;
     }
 
-    context.value = result;
-
+    ctx.value = result;
     next()
-  })
+  }
+
+  return combine(object, handler)
 }
 
-export default keys;
+export default keys

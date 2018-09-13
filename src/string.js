@@ -2,20 +2,20 @@ import { type, isRequired, unSetDefaulted } from './utils'
 
 
 const valid = value => type(value) === 'string'
-export default (next, context) => {
-  context.type = 'string'
+export default (ctx, next) => {
+  ctx.type = 'string'
 
   return () => {
-    const { value } = context
+    const { value } = ctx
 
     if (!valid(value)) {
-      if (isRequired(context)) context.error = { expect: 'string', actual: type(value) }
-      else if (unSetDefaulted(context, valid)) {
-        if (type(value) === 'number') context.value = `${value}`
-        else context.value = ''
+      if (isRequired(ctx)) ctx.error = { expect: 'string', actual: type(value) }
+      else if (unSetDefaulted(ctx, valid)) {
+        if (type(value) === 'number') ctx.value = `${value}`
+        else ctx.value = ''
       }
     }
 
-    if (!context.error) next();
+    if (!ctx.error) next();
   }
 }

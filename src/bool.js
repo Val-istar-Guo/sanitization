@@ -2,17 +2,17 @@ import { type, isRequired, unSetDefaulted } from './utils'
 
 
 const valid = value => type(value) === 'boolean'
-export default (next, context) => {
-  context.type = 'boolean'
+export default (ctx, next) => {
+  ctx.type = 'boolean'
 
   return () => {
-    const { value } = context
+    const { value } = ctx
 
     if (!valid(value)) {
-      if (isRequired(context)) context.error = { expect: 'boolean', actual: type(value) }
-      else if (unSetDefaulted(context, valid)) context.value = !!value
+      if (isRequired(ctx)) ctx.error = { expect: 'boolean', actual: type(value) }
+      else if (unSetDefaulted(ctx, valid)) ctx.value = !!value
     }
 
-    if (!context.error) next()
+    if (!ctx.error) next()
   }
 }

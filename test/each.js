@@ -27,7 +27,7 @@ test('# sa.each should throw error when some one not pass', t => {
   t.throws(() => sanitize(data))
 })
 
-test('# sa.each should not throw error when some one not pass', t => {
+test('# sa.each should not throw error when all pass', t => {
   const arr = [
     { title: '1', content: 'c1' },
     { title: '2', content: 'c2' },
