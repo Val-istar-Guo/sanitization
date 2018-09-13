@@ -25,4 +25,5 @@ test('# sa.filter should filter item that not pass', t => {
   ]
 
   t.deepEqual(sanitize(arr), result)
+  t.deepEqual(sa.filter(sa.valid({ a: 1, b: 2 }).required)([1, 3, 5]), [1])
 })
