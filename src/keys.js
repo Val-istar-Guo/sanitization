@@ -18,7 +18,6 @@ const keys = rules => {
         const value = validator(ctx.value[key]);
         if (value !== undefined) result[key] = value;
       } catch (err) {
-        console.log('key err: ', err)
         ctx.error = err
         return
       }

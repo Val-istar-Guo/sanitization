@@ -18,7 +18,6 @@ export default validator => {
           const value = validator(item)
           result.push(value)
         } catch (err) {
-          console.log('eeeeeeeeeeeee', err)
           ctx.error = err
           return
         }
