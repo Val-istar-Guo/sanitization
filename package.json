@@ -1,6 +1,6 @@
 {
   "name": "sanitization",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "sanitize dirty data",
   "main": "dist/index.js",
   "scripts": {
