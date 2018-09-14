@@ -1,4 +1,5 @@
 import type from './type'
+import warn from './warn'
 
 
 export default (ctx, valid) => {
