@@ -11,7 +11,7 @@ export default (ctx, next) => {
     if (!valid(value)) {
       if (isRequired(ctx)) ctx.error = { expect: 'number', actual: type(value) }
       else if (unSetDefaulted(ctx, valid)) {
-        if (type(value) === 'string' && /^\d+(\.\d+)?$/) ctx.value = Number(value)
+        if (type(value) === 'string' && /^\d+(\.\d+)?$/.test(valid)) ctx.value = Number(value)
         else ctx.value = NaN
       }
     }
