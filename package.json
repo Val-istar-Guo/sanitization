@@ -1,6 +1,6 @@
 {
   "name": "sanitization",
-  "version": "0.2.5",
+  "version": "0.2.6",
   "description": "sanitize dirty data",
   "main": "dist/bundle.js",
   "scripts": {
