@@ -2,14 +2,20 @@
   "name": "sanitization",
   "version": "0.2.5",
   "description": "sanitize dirty data",
-  "main": "dist/index.js",
+  "main": "dist/bundle.js",
   "scripts": {
     "test": "ava",
     "upgrade": "mili upgrade",
     "clean": "rm -rf ./dist/*",
     "build": "npm run clean & rollup -c",
     "prepublishOnly": "npm test; npm run build",
-    "precommit": "npm test"
+    "precommit": "npm test",
+    "updateSnapshots": "ava -u",
+    "premili:upgrade": "npm install mili@latest -D",
+    "mili:upgrade": "mili upgrade",
+    "ca": "git add -A && git-cz -av",
+    "commit": "git-cz",
+    "postpublish": "git push"
   },
   "repository": {
     "type": "git",
@@ -41,11 +47,17 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-preset-env": "^1.6.1",
     "babel-register": "^6.26.0",
-    "husky": "^0.14.3",
-    "mili": "0.0.1",
+    "husky": "^1.0.1",
+    "mili": "0.1.0",
     "rollup": "^0.58.0",
     "rollup-plugin-babel": "^3.0.3",
-    "rollup-plugin-node-resolve": "^3.3.0"
+    "rollup-plugin-node-resolve": "^3.3.0",
+    "rollup-plugin-commonjs": "^9.1.0",
+    "rollup-plugin-json": "^3.0.0",
+    "commitizen": "^2.10.1",
+    "cz-conventional-changelog": "^2.1.0",
+    "@commitlint/cli": "^7.1.2",
+    "@commitlint/config-conventional": "^7.1.2"
   },
   "dependencies": {},
   "ava": {
