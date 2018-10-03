@@ -46,5 +46,5 @@ export default enums => {
     else if (perdictType === 'object') return combine(object, handler)
     else if (perdictType === 'array') return combine(array, handler)
     else return handler
-  } else return func
+  } else return handler
 }
