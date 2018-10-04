@@ -24,6 +24,7 @@ import valid from './valid'
 import expect from './expect'
 
 import int from './int'
+import float from './float'
 
 
 import { link } from './utils'
@@ -45,6 +46,7 @@ const descorator = handler => {
     required: { get: () => connect(required) },
     any: { get: () => connect(any) },
     int: { get: () => connect(int) },
+    float: { get: () => connect(float) },
   })
 
   handler.keys = (...arg) => connect(keys(...arg))
