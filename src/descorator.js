@@ -23,6 +23,8 @@ import max from './max'
 import valid from './valid'
 import expect from './expect'
 
+import int from './int'
+
 
 import { link } from './utils'
 
@@ -41,7 +43,8 @@ const descorator = handler => {
     func: { get: () => connect(func) },
     function: { get: () => connect(func) },
     required: { get: () => connect(required) },
-    any: { get: () => connect(any) }
+    any: { get: () => connect(any) },
+    int: { get: () => connect(int) },
   })
 
   handler.keys = (...arg) => connect(keys(...arg))
