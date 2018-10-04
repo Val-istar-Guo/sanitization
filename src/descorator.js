@@ -19,6 +19,7 @@ import bool from './bool'
 
 import min from './min'
 import max from './max'
+import len from './len'
 
 import valid from './valid'
 import expect from './expect'
@@ -59,6 +60,8 @@ const descorator = handler => {
 
   handler.min = (...arg) => connect(min(...arg))
   handler.max = (...arg) => connect(max(...arg))
+  handler.len = (...arg) => connect(len(...arg))
+
   handler.valid = (...arg) => connect(valid(...arg))
   // handler.oneOf = (...arg) => connect(valid(...arg))
   handler.oneOf = handler.valid
