@@ -129,3 +129,28 @@ test('# sa', t => {
 
   t.deepEqual(santize(dirtyData), dirtyResult)
 })
+
+test.only('error info', t => {
+  try {
+    sa.each({
+      t: sa.array.len(2).required,
+    })([{ t: [1, 2] }, { t: [1] }])
+  } catch (err) {
+    t.snapshot(err.message)
+  }
+
+  try {
+    sa.keys({
+      t: sa.array.len(2).required,
+    })({ t: [1] })
+  } catch (err) {
+    t.snapshot(err.message)
+  }
+
+  try {
+    sa.array.len(2).required([1])
+  } catch (err) {
+    t.snapshot(err.message)
+  }
+
+})

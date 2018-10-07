@@ -8,4 +8,5 @@ export { default as isRequired } from './isRequired'
 export { default as unSetDefaulted } from './unSetDefaulted '
 export { default as isNumberLikeString } from './isNumberLikeString'
 export { default as warn } from './warn'
+export { default as genString } from './genString'
 

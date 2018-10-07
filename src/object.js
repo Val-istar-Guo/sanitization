@@ -6,6 +6,7 @@ export default (ctx, next) => {
   ctx.type = 'object'
 
   return () => {
+    ctx.rules.push('should be object')
     const { value } = ctx
 
     if (!valid(value)) {

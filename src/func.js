@@ -6,6 +6,7 @@ export default (ctx, next) => {
   ctx.type = 'function'
 
   return () => {
+    ctx.rules.push('should be a function')
     const { value } = ctx
 
     if (!valid(value)) {

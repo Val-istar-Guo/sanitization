@@ -6,6 +6,7 @@ export default (ctx, next) => {
   ctx.type = 'string'
 
   return () => {
+    ctx.rules.push('should be string')
     const { value } = ctx
 
     if (!valid(value)) {
