@@ -7,6 +7,7 @@ export default pattern => {
   const valid = value => pattern.test(value)
 
   const regexp = (ctx, next) => () => {
+    ctx.rules.push('conform to the regular expression passed in sa.regex')
     const { value } = ctx
 
     if (!valid(value)) {

@@ -6,6 +6,7 @@ export default (ctx, next) => {
   ctx.type = 'number'
 
   return () => {
+    ctx.rules.push('shoule be number')
     let { value } = ctx
 
     if (!valid(value)) {

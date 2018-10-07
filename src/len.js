@@ -8,16 +8,17 @@ const arrayLength = len => (ctx, next) => {
 
   return () => {
     const { value } = ctx
+    ctx.rules.push(`array.length shoule be ${len}`)
 
     if (!valid(value)) {
-      if (isRequired(ctx)) ctx.error = { expect: `array length is ${len}`, actual: value.length }
+      if (isRequired(ctx)) ctx.error = true
       else if (unSetDefaulted(ctx, valid)) {
         if (value.length > len) ctx.value = value.slice(0, len)
         else ctx.value = value.concat(new Array(len - value.length).fill(null))
       }
     }
 
-    if (!ctx.error) next()
+    next()
   }
 }
 
@@ -26,9 +27,10 @@ const stringLength = len => (ctx, next) => {
 
   return () => {
     const { value } = ctx
+    ctx.rules.push(`string length should be ${len}`)
 
     if (!valid(value)) {
-      if (isRequired(ctx)) ctx.error = { expect: `string length is ${len}`, actual: value.length }
+      if (isRequired(ctx)) ctx.error = true
       else if (unSetDefaulted(ctx, valid)) {
         if (value.length > len) {
           ctx.value = value.substr(0, len)
@@ -39,22 +41,24 @@ const stringLength = len => (ctx, next) => {
       }
     }
 
-    if (!ctx.error) next()
+    next()
   }
 }
 
 export default len => {
   if (type(len) !== 'number') throw typeError(`sa.length(len) len must be number, but get ${type(len)}`)
 
-  return (ctx, next) => () => {
-    if (!('type' in ctx)) {
-      ctx.type === 'string'
-      combine(string, stringLength(len))(ctx, next)()
-    } else if (ctx.type === 'string') combine(string, stringLength(len))(ctx, next)()
-    else if (ctx.type === 'array') combine(array, arrayLength(len))(ctx, next)()
-    else {
-      warn('sa.length should be call when type is string or array')
-      if (!ctx.error) next()
+  return (ctx, next) => {
+    return () => {
+      if (!('type' in ctx)) {
+        ctx.type === 'string'
+        combine(string, stringLength(len))(ctx, next)()
+      } else if (ctx.type === 'string') combine(string, stringLength(len))(ctx, next)()
+      else if (ctx.type === 'array') combine(array, arrayLength(len))(ctx, next)()
+      else {
+        warn('sa.length should be call when type is string or array')
+        if (!ctx.error) next()
+      }
     }
   }
 }

@@ -7,10 +7,11 @@ const stringIntHandler = (ctx, next) => {
   const valid = value => /^\d+$/.test(value)
 
   return () => {
+    ctx.rules.push('string should be int')
     const { value } = ctx
 
     if (!valid(value)) {
-      if (isRequired(ctx)) ctx.error = { expect: 'integer string', actual: value }
+      if (isRequired(ctx)) ctx.error = true
       else if (unSetDefaulted(ctx, valid)) {
         // float
         if (/^((\d+(\.\d*)?)|(\.\d+))$/.test(value)) ctx.value = `${Math.round(Number(value))}`
@@ -27,9 +28,11 @@ const numberIntHandler = (ctx, next) => {
   const valid = value => value % 1 === 0
 
   return () => {
+    ctx.rules.push('number should be int')
     const { value } = ctx
 
     if (!valid(value)) {
+
       if (isRequired(ctx)) ctx.error = { expect: 'integer', actual: value }
       else if (unSetDefaulted(ctx, valid)) ctx.value = Math.round(value)
     }

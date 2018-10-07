@@ -28,6 +28,7 @@ export default enums => {
     ctx.whiteList = ctx.whiteList.concat(enums);
 
     return () => {
+      ctx.rules.push('must be one of the enumerated values')
       const { value } = ctx
 
       if (!valid(value)) {

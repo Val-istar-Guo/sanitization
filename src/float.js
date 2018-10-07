@@ -7,6 +7,7 @@ const stringFloatHandler = (ctx, next) => {
   const valid = value => /^((\d+(.\d*)?)|(.\d+))$/.test(value)
 
   return () => {
+    ctx.rules.push('string should be a float')
     const { value } = ctx
 
     if (!valid(value)) {

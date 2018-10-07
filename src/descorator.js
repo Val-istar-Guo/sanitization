@@ -1,3 +1,4 @@
+import genString from './utils/genString'
 import func from './func'
 import any from './any'
 
@@ -27,45 +28,45 @@ import expect from './expect'
 import int from './int'
 import float from './float'
 
-
 import { link } from './utils'
 
 
-
 const descorator = handler => {
-  const connect = next => descorator(link(handler, next))
+  // const connect = (next, name) => descorator(link(handler, next, name))
+  const connect = (next, name) => descorator(link(handler, next, { name }))
 
   Object.defineProperties(handler, {
-    string: { get: () => connect(string) },
-    stringify: { get: () => connect(string) },
-    number: { get: () => connect(number) },
-    array: { get: () => connect(array) },
-    object: { get: () => connect(object) },
-    bool: { get: () => connect(bool) },
-    func: { get: () => connect(func) },
-    function: { get: () => connect(func) },
-    required: { get: () => connect(required) },
-    any: { get: () => connect(any) },
-    int: { get: () => connect(int) },
-    float: { get: () => connect(float) },
+    string: { get: () => connect(string, 'string') },
+    stringify: { get: () => connect(string, 'stringify') },
+    number: { get: () => connect(number, 'number') },
+    array: { get: () => connect(array, 'array') },
+    object: { get: () => connect(object, 'object') },
+    bool: { get: () => connect(bool, 'bool') },
+    func: { get: () => connect(func, 'func') },
+    function: { get: () => connect(func, 'function') },
+    required: { get: () => connect(required, 'required') },
+    any: { get: () => connect(any, 'any') },
+    int: { get: () => connect(int, 'int') },
+    float: { get: () => connect(float, 'float') },
   })
 
-  handler.keys = (...arg) => connect(keys(...arg))
-  handler.filter = (...arg) => connect(filter(...arg))
-  handler.each = (...arg) => connect(each(...arg))
+  // const cconnect = (next, name) => (...arg) => connect(next(...arg), `${name}(${arg.join(', ')})`)
+  const cconnect = (next, name) => (...args) => descorator(link(handler, next(...args), {
+    name,
+    args: args.map(genString).join(', '),
+  }))
 
-  handler.defaulted = (...arg) => connect(defaulted(...arg))
-
-  handler.regexp = (...arg) => connect(regexp(...arg))
-
-  handler.min = (...arg) => connect(min(...arg))
-  handler.max = (...arg) => connect(max(...arg))
-  handler.len = (...arg) => connect(len(...arg))
-
-  handler.valid = (...arg) => connect(valid(...arg))
-  // handler.oneOf = (...arg) => connect(valid(...arg))
-  handler.oneOf = handler.valid
-  handler.expect = (...arg) => connect(expect(...arg))
+  handler.keys = cconnect(keys, 'keys')
+  handler.filter = cconnect(filter, 'filter')
+  handler.each = cconnect(each, 'each')
+  handler.defaulted = cconnect(defaulted, 'defaulted')
+  handler.regexp = cconnect(regexp, 'regexp')
+  handler.min = cconnect(min, 'min')
+  handler.max = cconnect(max, 'max')
+  handler.len = cconnect(len, `len`)
+  handler.valid = cconnect(valid, 'valid')
+  handler.oneOf = cconnect(valid, 'oneOf')
+  handler.expect = cconnect(expect, 'expect')
 
   return handler;
 }

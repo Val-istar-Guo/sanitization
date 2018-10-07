@@ -18,6 +18,8 @@ const keys = rules => {
         const value = validator(ctx.value[key]);
         if (value !== undefined) result[key] = value;
       } catch (err) {
+        ctx.self.args = `{\n  ${key}: ${err.name}\n}`
+        err.path = `.${key}${err.path}`
         ctx.error = err
         return
       }

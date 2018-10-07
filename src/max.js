@@ -10,6 +10,7 @@ const maxNumber = max => (ctx, next) => {
   const valid = value => type(value) === 'number' && value <= max
 
   return () => {
+    ctx.rules.push(`number should not more than ${max}`)
     const { value } = ctx
 
     if (type(value) !== 'number') {
@@ -28,6 +29,7 @@ const maxArray = max => (ctx, next) => {
   const valid = value => value.length <= max
 
   return () => {
+    ctx.rules.push(`array.length should not more than ${max}`)
     const { value } = ctx
 
     if (type(value) !== 'array') {
@@ -46,6 +48,7 @@ const maxString = max => (ctx, next) => {
   const valid = value => value.length <= max
 
   return () => {
+    ctx.rules.push(`string.length should not more than ${max}`)
     const { value } = ctx
 
     if (type(value) !== 'string') {

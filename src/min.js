@@ -8,6 +8,7 @@ const minNumber = min => (ctx, next) => {
   const valid = value => type(value) === 'number' && value >= min
 
   return () => {
+    ctx.rules.push(`number should not less than ${min}`)
     const { value } = ctx
 
     if (type(value) !== 'number') {
@@ -26,6 +27,7 @@ const minArray = min => (ctx, next) => {
   const valid = value => value.length >= min
 
   return () => {
+    ctx.rules.push(`array.length should not less than ${min}`)
     const { value } = ctx
 
     if (type(value) !== 'array') {
@@ -44,6 +46,7 @@ const minString = min => (ctx, next) => {
   const valid = value => value.length >= min
 
   return () => {
+    ctx.rules.push(`string.length should not less than ${min}`)
     const { value } = ctx
 
     if (type(value) !== 'string') {

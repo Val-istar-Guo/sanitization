@@ -6,13 +6,14 @@ export default (ctx, next) => {
   ctx.type = 'array'
 
   return () => {
+    ctx.rules.push('should be array')
     const { value } = ctx
 
     if (!valid(value)) {
-      if (isRequired(ctx)) ctx.error = { expect: 'array', actual: type(value) }
+      if (isRequired(ctx)) ctx.error = true
       else if (unSetDefaulted(ctx, valid)) ctx.value = []
     }
 
-    if (!ctx.error) next()
+    next()
   }
 }
