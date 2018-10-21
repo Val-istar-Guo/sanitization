@@ -130,7 +130,7 @@ test('# sa', t => {
   t.deepEqual(santize(dirtyData), dirtyResult)
 })
 
-test.only('error info', t => {
+test('error info', t => {
   try {
     sa.each({
       t: sa.array.len(2).required,
