@@ -8,7 +8,7 @@
 Used to sanitize dirty data. see more:
 
 * [Why i write sanitization](http://miaooo.me/article/%E4%B8%BA%E8%84%8F%E6%95%B0%E6%8D%AE%E6%B6%88%E6%AF%92)
-* [API Document](https://github.com/Val-istar-Guo/sanitization/wiki/API-Documnet)
+* [API Document](https://github.com/Val-istar-Guo/sanitization/wiki/API-Document)
 
 ## Install
 
@@ -76,7 +76,7 @@ const dirtyData = {
   ]
 }
 
-const santize = sa.props({
+const santize = sa.keys({
   name: sa.string,
   minPrice: sa.number.required,
   products: sa.filter({
